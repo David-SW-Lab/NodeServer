@@ -1,5 +1,5 @@
 const path = require("path");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const sourcePath = path.resolve(__dirname, "./src");
 
@@ -7,7 +7,7 @@ module.exports = env => ({
   mode: "development",
   entry: path.join(sourcePath, "server.js"),
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, "dist"),
     filename: "server.js"
   },
   module: {
@@ -28,21 +28,21 @@ module.exports = env => ({
     extensions: [".json", ".js"]
   },
   devServer: {
-    port: 8081,
+    port: 8081
   },
-  plugins : [
+  plugins: [
     new HtmlWebpackPlugin({
-        title : 'Index Title',
-        hash : true,
-        filename : 'index.html',
-        template: './html/index.html'
+      title: "Index Title",
+      hash: true,
+      filename: "index.html",
+      template: "./html/index.html"
     }),
     new HtmlWebpackPlugin({
-        title : 'Multiple Title',
-        hash : true,
-        filename : 'write.html',
-        template: './html/write.html'
+      title: "Multiple Title",
+      hash: true,
+      filename: "write.html",
+      template: "./html/write.html"
     })
-],
+  ],
   devtool: "source-map"
 });

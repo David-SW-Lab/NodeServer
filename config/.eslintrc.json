@@ -1,0 +1,28 @@
+{
+    "extends" : [
+        "airbnb-base",
+        "plugin:prettier/recommended"
+    ],
+    "rules":{
+        "max-len":[
+            "error",
+            {
+                "code": 120,
+                "tabWidth":4
+            }
+        ]
+    },
+    "plugins":[
+        "jest",
+        "import"
+    ],
+    "settings":{
+        "import/resolver":{
+            "node":{
+                "paths":[
+                    "src"
+                ]
+            }
+        }
+    }
+}
