@@ -1,26 +1,35 @@
 import express from "express";
-import { addData, connectDatabase } from "./database";
+import { __express } from "ejs";
+import { addData, connectDatabase, getData, getCountPost } from "./database";
 
 const app = express();
-app.use(express.urlencoded({ extended: true }));
+const bodyParser = require("body-parser");
 
-connectDatabase()
-  .then(addData)
-  .then(() => {
-    app.listen(8080, () => {
-      console.log("listening on 8080");
-    });
+app.use(bodyParser.urlencoded({ extended: true }));
+app.set("view engine", "ejs");
+app.engine("ejs", __express);
 
-    app.get("/", (req, res) => {
-      res.sendFile(`${__dirname}/index.html`);
-    });
+connectDatabase().then(() => {
+  app.listen(8080, () => {
+    console.log("listening on 8080");
+  });
 
-    app.get("/write", (req, res) => {
-      res.sendFile(`${__dirname}/write.html`);
-    });
+  app.get("/", (req, res) => {
+    res.sendFile(`${__dirname}/index.html`);
+  });
 
-    app.post("/add", (req, res) => {
-      console.log(req.body);
-      res.send("전송완료");
+  app.get("/write", (req, res) => {
+    res.sendFile(`${__dirname}/write.html`);
+  });
+
+  app.post("/add", (req, res) => {
+    getCountPost().then(count => addData(req.body, count));
+    res.send("전송완료");
+  });
+
+  app.get("/list", (req, res) => {
+    getData().then(data => {
+      res.render("list.ejs", { posts: data });
     });
   });
+});
