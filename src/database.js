@@ -26,6 +26,22 @@ export const getCountPost = () =>
     });
   });
 
+export const increaseCountPost = () =>
+  new Promise((resolve, reject) => {
+    const db = client.db("todoapp");
+
+    db.collection("counter").updateOne(
+      { name: "Count" },
+      { $inc: { totalPost: 1 } },
+      (err, result) => {
+        if (err) reject();
+
+        console.log("count update");
+        resolve(result);
+      }
+    );
+  });
+
 export const addData = (data, postCount) =>
   new Promise((resolve, reject) => {
     const db = client.db("todoapp");
@@ -41,9 +57,10 @@ export const addData = (data, postCount) =>
             _id: postCount + 1,
             title: data.title,
             date: data.date
-          })
+          }),
+          result
         );
-        resolve(result);
+        resolve(postCount + 1);
       }
     );
   });
@@ -60,4 +77,45 @@ export const getData = () =>
         console.log(result);
         resolve(result);
       });
+  });
+
+export const searchData = data =>
+  new Promise((resolve, reject) => {
+    const db = client.db("todoapp");
+
+    const condition = [
+      {
+        $search: {
+          index: "titleSearch",
+          text: {
+            query: data,
+            path: "title"
+          }
+        }
+      }
+      // sort
+    ];
+
+    db.collection("post")
+      // .find({ title: data })
+      // .find({ $text: { $search: data } })
+      .aggregate(condition)
+      .toArray((err, result) => {
+        if (err) reject();
+
+        console.log(result);
+        resolve(result);
+      });
+  });
+
+export const deleteData = body =>
+  new Promise((resolve, reject) => {
+    const db = client.db("todoapp");
+
+    db.collection("post").deleteOne(body, (err, result) => {
+      if (err) reject();
+
+      console.log("delete");
+      resolve(result);
+    });
   });

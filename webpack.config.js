@@ -48,6 +48,12 @@ module.exports = () => ({
       hash: true,
       filename: "list.ejs",
       template: "!!html-loader!/views/list.ejs"
+    }),
+    new HtmlWebpackPlugin({
+      title: "Index Title",
+      hash: true,
+      filename: "search.ejs",
+      template: "!!html-loader!/views/search.ejs"
     })
   ],
   devtool: "source-map"
